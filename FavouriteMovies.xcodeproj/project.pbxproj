@@ -11,6 +11,7 @@
 		81C198812A22183E0047A4B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81C198802A22183E0047A4B3 /* Assets.xcassets */; };
 		81C198842A22183E0047A4B3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81C198832A22183E0047A4B3 /* Preview Assets.xcassets */; };
 		81C1988D2A22186A0047A4B3 /* MoviesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C1988C2A22186A0047A4B3 /* MoviesListView.swift */; };
+		81C1988F2A221CC60047A4B3 /* db.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 81C1988E2A221CC60047A4B3 /* db.sqlite */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		81C198802A22183E0047A4B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		81C198832A22183E0047A4B3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		81C1988C2A22186A0047A4B3 /* MoviesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesListView.swift; sourceTree = "<group>"; };
+		81C1988E2A221CC60047A4B3 /* db.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = db.sqlite; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 		81C1988B2A22184F0047A4B3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				81C1988E2A221CC60047A4B3 /* db.sqlite */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -142,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81C198842A22183E0047A4B3 /* Preview Assets.xcassets in Resources */,
+				81C1988F2A221CC60047A4B3 /* db.sqlite in Resources */,
 				81C198812A22183E0047A4B3 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
