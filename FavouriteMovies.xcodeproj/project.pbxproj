@@ -15,6 +15,7 @@
 		81C198922A221FFE0047A4B3 /* MovieItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C198912A221FFE0047A4B3 /* MovieItemView.swift */; };
 		81C198952A2225CD0047A4B3 /* Blackbird in Frameworks */ = {isa = PBXBuildFile; productRef = 81C198942A2225CD0047A4B3 /* Blackbird */; };
 		81C198972A2226810047A4B3 /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C198962A2226810047A4B3 /* AppDatabase.swift */; };
+		81C198992A2227C80047A4B3 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C198982A2227C80047A4B3 /* Movie.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		81C1988E2A221CC60047A4B3 /* db.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = db.sqlite; sourceTree = "<group>"; };
 		81C198912A221FFE0047A4B3 /* MovieItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieItemView.swift; sourceTree = "<group>"; };
 		81C198962A2226810047A4B3 /* AppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabase.swift; sourceTree = "<group>"; };
+		81C198982A2227C80047A4B3 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				81C1988E2A221CC60047A4B3 /* db.sqlite */,
+				81C198982A2227C80047A4B3 /* Movie.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -183,6 +186,7 @@
 				81C1987D2A22183D0047A4B3 /* FavouriteMoviesApp.swift in Sources */,
 				81C198972A2226810047A4B3 /* AppDatabase.swift in Sources */,
 				81C1988D2A22186A0047A4B3 /* MoviesListView.swift in Sources */,
+				81C198992A2227C80047A4B3 /* Movie.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
