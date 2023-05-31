@@ -15,9 +15,17 @@ struct MoviesListView: View {
     // Access the connection to the database (needed to add a new record)
     @Environment(\.blackbirdDatabase) var db: Blackbird.Database?
     
-    // Attempt to auto-load movies
+    // The list of movies produced by joining the Movie and Genre tables
     @BlackbirdLiveQuery(tableName: "Movie", { db in
-        try await db.query("SELECT * FROM Movie")
+        try await db.query("""
+                            SELECT
+                                Movie.name,
+                                Genre.name as "genre",
+                                Movie.rating
+                            FROM Movie
+                            INNER JOIN Genre ON
+                                Movie.genre_id = Genre.id
+                           """)
     }) var movies
     
     // Is the interface to add a movie visible right now?
@@ -25,19 +33,16 @@ struct MoviesListView: View {
     
     // MARK: Computed properties
     var body: some View {
-        let _ = print(dump(movies))
-        let _ = print("⭐️")
-        let _ = print(dump(movies.results))
         NavigationView {
             VStack {
                 List(movies.results, id: \.self) { currentMovie in
                     
                     if let name = currentMovie["name"]?.stringValue,
-                       let genre = currentMovie["genre_id"]?.intValue,
+                       let genre = currentMovie["genre"]?.stringValue,
                        let rating = currentMovie["rating"]?.intValue {
                         
                         MovieItemView(name: name,
-                                      genre: "\(genre)",
+                                      genre: genre,
                                       rating: rating)
                         
                     }
