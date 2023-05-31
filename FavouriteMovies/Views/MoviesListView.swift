@@ -17,15 +17,7 @@ struct MoviesListView: View {
     
     // The list of movies produced by joining the Movie and Genre tables
     @BlackbirdLiveQuery(tableName: "Movie", { db in
-        try await db.query("""
-                            SELECT
-                                Movie.name,
-                                Genre.name as "genre",
-                                Movie.rating
-                            FROM Movie
-                            INNER JOIN Genre ON
-                                Movie.genre_id = Genre.id
-                           """)
+        try await db.query("SELECT * FROM MovieWithGenre")
     }) var movies
     
     // Is the interface to add a movie visible right now?
