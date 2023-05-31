@@ -17,6 +17,11 @@ struct MoviesListView: View {
 
     // The list of favourite movies, as read from the database
     @State var movies: [MovieWithGenre] = []
+
+    // Attempt to auto-load movies
+    @BlackbirdLiveQuery(tableName: "Movie", { db in
+        try await db.query("SELECT * FROM Movie")
+    }) var alternateMovies
     
     // Is the interface to add a movie visible right now?
     @State var showingAddMovieView = false
@@ -26,23 +31,31 @@ struct MoviesListView: View {
     
     // MARK: Computed properties
     var body: some View {
+        let _ = print(dump(alternateMovies))
+        let _ = print("⭐️")
+        let _ = print(dump(alternateMovies.results))
         NavigationView {
-            List(movies, id: \.self) { currentMovie in
-                MovieItemView(name: currentMovie.name,
-                              genre: currentMovie.genre,
-                              rating: currentMovie.rating)
-            }
-            .navigationTitle("Favourite Movies")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button(action: {
-                        showingAddMovieView = true
-                    }, label: {
-                        Image(systemName: "plus")
-                    })
-                    .sheet(isPresented: $showingAddMovieView) {
-                        AddMovieView(movieWasAdded: $movieWasAdded)
-                            .presentationDetents([.fraction(0.3)])
+            VStack {
+                List(alternateMovies.results, id: \.self) { currentMovie in
+                    Text((currentMovie["name"]?.stringValue)!)
+                }
+//                List(movies, id: \.self) { currentMovie in
+//                    MovieItemView(name: currentMovie.name,
+//                                  genre: currentMovie.genre,
+//                                  rating: currentMovie.rating)
+//                }
+                .navigationTitle("Favourite Movies")
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button(action: {
+                            showingAddMovieView = true
+                        }, label: {
+                            Image(systemName: "plus")
+                        })
+                        .sheet(isPresented: $showingAddMovieView) {
+                            AddMovieView(movieWasAdded: $movieWasAdded)
+                                .presentationDetents([.fraction(0.3)])
+                        }
                     }
                 }
             }
