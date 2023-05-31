@@ -21,6 +21,9 @@ struct MoviesListView: View {
     // Is the interface to add a movie visible right now?
     @State var showingAddMovieView = false
     
+    // Has a movie been added? Time to refresh this view...
+    @State var movieWasAdded = false
+    
     // MARK: Computed properties
     var body: some View {
         NavigationView {
@@ -38,41 +41,51 @@ struct MoviesListView: View {
                         Image(systemName: "plus")
                     })
                     .sheet(isPresented: $showingAddMovieView) {
-                        AddMovieView()
+                        AddMovieView(movieWasAdded: $movieWasAdded)
                             .presentationDetents([.fraction(0.3)])
                     }
                 }
             }
         }
         .task {
-            // Clear the list of favourite movies
-            movies = []
-            
-            // Refresh the list of favourite movies
-            do {
-                for row in try await db!.query("SELECT * FROM MovieWithGenre") {
-                    guard let id = row["id"]?.intValue,
-                          let name = row["name"]?.stringValue,
-                          let genre = row["genre"]?.stringValue,
-                          let rating = row["rating"]?.intValue else {
-                        print("Could not read row data")
-                        continue
-                    }
-                    movies.append(MovieWithGenre(id: id,
-                                                 name: name,
-                                                 genre: genre,
-                                                 rating: rating))
-                    print(id)
-                    print(name)
-                    print(genre)
-                    print(rating)
-                    print("----")
-                }
-            } catch {
-                print(error)
+            await refreshMovies()
+        }
+        .onChange(of: movieWasAdded) { _ in
+            Task {
+                await refreshMovies()
             }
         }
         
+    }
+    
+    func refreshMovies() async {
+        // Clear the list of favourite movies
+        movies = []
+        
+        // Refresh the list of favourite movies
+        do {
+            for row in try await db!.query("SELECT * FROM MovieWithGenre") {
+                guard let id = row["id"]?.intValue,
+                      let name = row["name"]?.stringValue,
+                      let genre = row["genre"]?.stringValue,
+                      let rating = row["rating"]?.intValue else {
+                    print("Could not read row data")
+                    continue
+                }
+                movies.append(MovieWithGenre(id: id,
+                                             name: name,
+                                             genre: genre,
+                                             rating: rating))
+                print(id)
+                print(name)
+                print(genre)
+                print(rating)
+                print("----")
+            }
+        } catch {
+            print(error)
+        }
+
     }
 }
 
