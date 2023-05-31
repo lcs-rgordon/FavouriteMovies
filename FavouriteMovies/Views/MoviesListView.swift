@@ -9,41 +9,40 @@ import Blackbird
 import SwiftUI
 
 struct MoviesListView: View {
-
+    
     // MARK: Stored properties
     
     // Access the connection to the database (needed to add a new record)
     @Environment(\.blackbirdDatabase) var db: Blackbird.Database?
-
-    // The list of favourite movies, as read from the database
-    @State var movies: [MovieWithGenre] = []
-
+    
     // Attempt to auto-load movies
     @BlackbirdLiveQuery(tableName: "Movie", { db in
         try await db.query("SELECT * FROM Movie")
-    }) var alternateMovies
+    }) var movies
     
     // Is the interface to add a movie visible right now?
     @State var showingAddMovieView = false
     
-    // Has a movie been added? Time to refresh this view...
-    @State var movieWasAdded = false
-    
     // MARK: Computed properties
     var body: some View {
-        let _ = print(dump(alternateMovies))
+        let _ = print(dump(movies))
         let _ = print("⭐️")
-        let _ = print(dump(alternateMovies.results))
+        let _ = print(dump(movies.results))
         NavigationView {
             VStack {
-                List(alternateMovies.results, id: \.self) { currentMovie in
-                    Text((currentMovie["name"]?.stringValue)!)
+                List(movies.results, id: \.self) { currentMovie in
+                    
+                    if let name = currentMovie["name"]?.stringValue,
+                       let genre = currentMovie["genre_id"]?.intValue,
+                       let rating = currentMovie["rating"]?.intValue {
+                        
+                        MovieItemView(name: name,
+                                      genre: "\(genre)",
+                                      rating: rating)
+                        
+                    }
+                    
                 }
-//                List(movies, id: \.self) { currentMovie in
-//                    MovieItemView(name: currentMovie.name,
-//                                  genre: currentMovie.genre,
-//                                  rating: currentMovie.rating)
-//                }
                 .navigationTitle("Favourite Movies")
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
@@ -53,59 +52,22 @@ struct MoviesListView: View {
                             Image(systemName: "plus")
                         })
                         .sheet(isPresented: $showingAddMovieView) {
-                            AddMovieView(movieWasAdded: $movieWasAdded)
+                            AddMovieView()
                                 .presentationDetents([.fraction(0.3)])
                         }
                     }
                 }
             }
         }
-        .task {
-            await refreshMovies()
-        }
-        .onChange(of: movieWasAdded) { _ in
-            Task {
-                await refreshMovies()
-            }
-        }
         
     }
     
-    func refreshMovies() async {
-        // Clear the list of favourite movies
-        movies = []
-        
-        // Refresh the list of favourite movies
-        do {
-            for row in try await db!.query("SELECT * FROM MovieWithGenre") {
-                guard let id = row["id"]?.intValue,
-                      let name = row["name"]?.stringValue,
-                      let genre = row["genre"]?.stringValue,
-                      let rating = row["rating"]?.intValue else {
-                    print("Could not read row data")
-                    continue
-                }
-                movies.append(MovieWithGenre(id: id,
-                                             name: name,
-                                             genre: genre,
-                                             rating: rating))
-                print(id)
-                print(name)
-                print(genre)
-                print(rating)
-                print("----")
-            }
-        } catch {
-            print(error)
-        }
-
-    }
 }
 
 struct MoviesListView_Previews: PreviewProvider {
     static var previews: some View {
         MoviesListView()
         // Make the database available to all other view through the environment
-        .environment(\.blackbirdDatabase, AppDatabase.instance)
+            .environment(\.blackbirdDatabase, AppDatabase.instance)
     }
 }

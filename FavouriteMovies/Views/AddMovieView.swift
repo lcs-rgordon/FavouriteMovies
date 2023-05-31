@@ -25,9 +25,6 @@ struct AddMovieView: View {
     @State var genre = 1
     @State var rating = 3
     
-    // Make parent view refresh
-    @Binding var movieWasAdded: Bool
-    
     // MARK: Computed properties
     var body: some View {
         NavigationView {
@@ -104,8 +101,6 @@ struct AddMovieView: View {
             name = ""
             genre = 1
             rating = 3
-            // Make parent view refresh
-            movieWasAdded.toggle()
         }
 
     }
@@ -114,7 +109,7 @@ struct AddMovieView: View {
 
 struct AddMovieView_Previews: PreviewProvider {
     static var previews: some View {
-        AddMovieView(movieWasAdded: .constant(false))
+        AddMovieView()
         // Make the database available to all other view through the environment
         .environment(\.blackbirdDatabase, AppDatabase.instance)
 
