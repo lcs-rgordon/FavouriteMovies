@@ -15,9 +15,14 @@ struct AddMovieView: View {
     // Access the connection to the database (needed to add a new record)
     @Environment(\.blackbirdDatabase) var db: Blackbird.Database?
     
+    // The list of genres, as read from the database
+    @BlackbirdLiveModels({ db in
+        try await Genre.read(from: db)
+    }) var genres
+    
     // Holds details for the new movie
     @State var name = ""
-    @State var genre = ""
+    @State var genre = 1
     @State var rating = 3
     
     // MARK: Computed properties
@@ -27,11 +32,25 @@ struct AddMovieView: View {
                 TextField("Enter the movie name", text: $name)
                     .textFieldStyle(.roundedBorder)
 
-                TextField("What is the movie's genre?", text: $genre)
-                    .textFieldStyle(.roundedBorder)
+                HStack {
+                    Text("Genre:")
+                        .bold()
+                    
+                    Picker(selection: $genre,
+                           label: Text("Genre"),
+                           content: {
+                        
+                        ForEach(genres.results) { currentGenre in
+                            Text(currentGenre.name).tag(currentGenre.id)
+                        }
+                        
+                    })
+                    
+                    Spacer()
+                }
 
                 Picker(selection: $rating,
-                       label: Text("Picker Name"),
+                       label: Text("Rating"),
                        content: {
                     Text("★").tag(1)
                     Text("★★").tag(2)
@@ -65,7 +84,7 @@ struct AddMovieView: View {
                 try core.query("""
                             INSERT INTO movie (
                                 name,
-                                genre,
+                                genre_id,
                                 rating
                             )
                             VALUES (
@@ -80,7 +99,7 @@ struct AddMovieView: View {
             }
             // Reset input fields after writing to database
             name = ""
-            genre = ""
+            genre = 1
             rating = 3
         }
 

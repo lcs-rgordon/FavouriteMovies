@@ -12,10 +12,11 @@ struct MoviesListView: View {
 
     // MARK: Stored properties
     
+    // Access the connection to the database (needed to add a new record)
+    @Environment(\.blackbirdDatabase) var db: Blackbird.Database?
+
     // The list of favourite movies, as read from the database
-    @BlackbirdLiveModels({ db in
-        try await Movie.read(from: db)
-    }) var movies
+    @State var movies: [MovieWithGenre] = []
     
     // Is the interface to add a movie visible right now?
     @State var showingAddMovieView = false
@@ -23,7 +24,7 @@ struct MoviesListView: View {
     // MARK: Computed properties
     var body: some View {
         NavigationView {
-            List(movies.results) { currentMovie in
+            List(movies, id: \.self) { currentMovie in
                 MovieItemView(name: currentMovie.name,
                               genre: currentMovie.genre,
                               rating: currentMovie.rating)
@@ -43,6 +44,35 @@ struct MoviesListView: View {
                 }
             }
         }
+        .task {
+            // Clear the list of favourite movies
+            movies = []
+            
+            // Refresh the list of favourite movies
+            do {
+                for row in try await db!.query("SELECT * FROM MovieWithGenre") {
+                    guard let id = row["id"]?.intValue,
+                          let name = row["name"]?.stringValue,
+                          let genre = row["genre"]?.stringValue,
+                          let rating = row["rating"]?.intValue else {
+                        print("Could not read row data")
+                        continue
+                    }
+                    movies.append(MovieWithGenre(id: id,
+                                                 name: name,
+                                                 genre: genre,
+                                                 rating: rating))
+                    print(id)
+                    print(name)
+                    print(genre)
+                    print(rating)
+                    print("----")
+                }
+            } catch {
+                print(error)
+            }
+        }
+        
     }
 }
 
