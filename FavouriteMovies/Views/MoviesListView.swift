@@ -37,15 +37,7 @@ struct MoviesListView: View {
             VStack {
                 List(movies.results, id: \.self) { currentMovie in
                     
-                    if let name = currentMovie["name"]?.stringValue,
-                       let genre = currentMovie["genre"]?.stringValue,
-                       let rating = currentMovie["rating"]?.intValue {
-                        
-                        MovieItemView(name: name,
-                                      genre: genre,
-                                      rating: rating)
-                        
-                    }
+                    MovieItemView(movie: currentMovie)
                     
                 }
                 .navigationTitle("Favourite Movies")
