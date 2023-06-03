@@ -13,8 +13,8 @@ struct MoviesListView: View {
     // MARK: Stored properties
     
     // The list of favourite movies, as read from the database
-    @BlackbirdLiveModels({ db in
-        try await Movie.read(from: db)
+    @BlackbirdLiveQuery(tableName: "Movie", { db in
+        try await db.query("SELECT * FROM MoviesWithGenreNames")
     }) var movies
     
     // Is the interface to add a movie visible right now?
@@ -23,10 +23,17 @@ struct MoviesListView: View {
     // MARK: Computed properties
     var body: some View {
         NavigationView {
-            List(movies.results) { currentMovie in
-                MovieItemView(name: currentMovie.name,
-                              genre: currentMovie.genre,
-                              rating: currentMovie.rating)
+            List(movies.results, id: \.self) { currentMovie in
+                
+                if let name = currentMovie["name"]?.stringValue,
+                   let genre = currentMovie["genre"]?.stringValue,
+                   let rating = currentMovie["rating"]?.intValue {
+                    
+                    MovieItemView(name: name,
+                                  genre: genre,
+                                  rating: rating)
+                }
+                
             }
             .navigationTitle("Favourite Movies")
             .toolbar {

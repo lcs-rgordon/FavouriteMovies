@@ -12,7 +12,7 @@ struct Movie: BlackbirdModel {
     
     @BlackbirdColumn var id: Int
     @BlackbirdColumn var name: String
-    @BlackbirdColumn var genre: String
+    @BlackbirdColumn var genre_id: Int
     @BlackbirdColumn var rating: Int
     
 }
