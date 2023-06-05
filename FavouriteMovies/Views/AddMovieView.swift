@@ -15,6 +15,11 @@ struct AddMovieView: View {
     // Access the connection to the database (needed to add a new record)
     @Environment(\.blackbirdDatabase) var db: Blackbird.Database?
     
+    // The list of genres, as read from the database
+    @BlackbirdLiveModels({ db in
+        try await Genre.read(from: db)
+    }) var genres
+    
     // Holds details for the new movie
     @State var name = ""
     @State var genre = 1
@@ -30,9 +35,11 @@ struct AddMovieView: View {
                 Picker(selection: $genre,
                        label: Text("Select a genre"),
                        content: {
-                    Text("Science Fiction").tag(1)
-                    Text("Drama").tag(2)
-                    Text("Action").tag(3)
+                    
+                    ForEach(genres.results) { currentGenre in
+                        Text(currentGenre.name).tag(currentGenre.id)
+                    }
+
                 })
 
                 Picker(selection: $rating,
