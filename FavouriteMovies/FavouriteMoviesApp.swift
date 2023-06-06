@@ -12,7 +12,7 @@ import SwiftUI
 struct FavouriteMoviesApp: App {
     var body: some Scene {
         WindowGroup {
-            MoviesListView()
+            GroupedByGenreListView()
                 // Make the database available to all other view through the environment
                 .environment(\.blackbirdDatabase, AppDatabase.instance)
         }
