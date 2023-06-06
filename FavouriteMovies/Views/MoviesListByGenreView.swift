@@ -30,7 +30,7 @@ struct MoviesListByGenreView: View {
                let rating = currentMovie["rating"]?.intValue {
                 
                 MovieItemView(name: name,
-                              genre: genre,
+                              genre: "",
                               rating: rating)
             }
             
