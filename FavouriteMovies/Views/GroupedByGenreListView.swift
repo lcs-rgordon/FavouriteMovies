@@ -17,8 +17,8 @@ struct GroupedByGenreListView: View {
         try await Genre.read(from: db, orderBy: .ascending(\.$name))
     }) var genres
     
-    // Is the interface to add a genre visible right now?
-    @State var showingAddGenreView = false
+    // Is the interface to add a movie visible right now?
+    @State var showingAddMovieView = false
     
     // MARK: Computed properties
     var body: some View {
@@ -33,6 +33,19 @@ struct GroupedByGenreListView: View {
                 }
             }
             .listStyle(.grouped)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: {
+                        showingAddMovieView = true
+                    }, label: {
+                        Image(systemName: "plus")
+                    })
+                    .sheet(isPresented: $showingAddMovieView) {
+                        AddMovieView()
+                            .presentationDetents([.fraction(0.3)])
+                    }
+                }
+            }
             .navigationTitle("Favourite Movies")
         }
     }}
