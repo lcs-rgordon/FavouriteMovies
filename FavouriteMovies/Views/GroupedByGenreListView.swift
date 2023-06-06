@@ -24,9 +24,10 @@ struct GroupedByGenreListView: View {
     var body: some View {
         NavigationView {
             List(genres.results) { currentGenre in
-                Section(content: {
-                    MoviesListByGenreView(genreId: currentGenre.id)
-                }, header: {
+                NavigationLink(destination: {
+                    MoviesListByGenreView(genreId: currentGenre.id,
+                                          genreName: currentGenre.name)
+                }, label: {
                     Text(currentGenre.name)
                 })
             }
