@@ -18,15 +18,10 @@ struct MovieItemView: View {
     
     // The user interface
     var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(name)
-                    .font(.title3)
-                    .bold()
-                Text(genre)
-                    .font(.subheadline)
-            }
-            
+        HStack(alignment: .top) {
+            Text(name)
+                .font(.title2)
+                .padding(.bottom, 10)
             Spacer()
             
             Text("\(rating)/5")
