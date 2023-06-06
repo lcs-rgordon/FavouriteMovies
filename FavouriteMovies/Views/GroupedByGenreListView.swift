@@ -23,14 +23,12 @@ struct GroupedByGenreListView: View {
     // MARK: Computed properties
     var body: some View {
         NavigationView {
-            List {
-                ForEach(genres.results) { currentGenre in
-                    Section(content: {
-                        MoviesListByGenreView(genreId: currentGenre.id)
-                    }, header: {
-                        Text(currentGenre.name)
-                    })
-                }
+            List(genres.results) { currentGenre in
+                Section(content: {
+                    MoviesListByGenreView(genreId: currentGenre.id)
+                }, header: {
+                    Text(currentGenre.name)
+                })
             }
             .listStyle(.grouped)
             .toolbar {
